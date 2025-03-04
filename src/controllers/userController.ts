@@ -50,10 +50,71 @@ export const getUser = async (req: Request, res: Response) => {
 
 
 // READ MANY
+export const getUsers = async (req: Request, res: Response) => {
+
+    try {
+        const result = await query<User[]>(
+            "SELECT * FROM users",
+            []
+          );
+
+          res.status(200).json({message: "Users fetched successfuly", user: result});
+
+    } catch(error) {
+        res.status(500).json({error: "Internal server error"});
+    }
+
+};
 
 
 // UPDATE 
+export const updateUser = async (req: Request, res: Response) => {
+
+    const { id } = req.params; // URL-parameter
+    const { username, password } = req.body; // Data som skickas via body (som i formulär)
+
+    
+    try {
+        const result = await query<User[]>(
+            "UPDATE users SET username = ?, password = ? WHERE id = ? ",
+            [username, password, id]
+          );
+
+          // TODO: Om användaren inte hittas 
+
+          res.status(200).json({message: "User updated successfuly"});
+
+    } catch(error) {
+        res.status(500).json({error: "Internal server error"});
+    }
+
+
+};
 
 
 // DELETE
+export const deleteUser = async (req: Request, res: Response) => {
+
+        const { id } = req.params;
+
+        try {
+            const result = await query<void> (
+                "DELETE FROM users WHERE id = ?",
+                [id]
+              );
+    
+              // TODO: Om användaren inte hittas
+ 
+    
+              res.status(200).json({message: "User deleted successfully"});
+    
+        } catch(error) {
+            res.status(500).json({error: "Internal server error"});
+        }
+
+
+
+
+
+};
 
